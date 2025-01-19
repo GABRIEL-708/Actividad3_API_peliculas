@@ -1,4 +1,4 @@
-# API de Películas - Documentación
+# API de Películas 
 
 ## Introducción
 Este proyecto consiste en una **API RESTful** para gestionar películas. La API permite realizar operaciones **CRUD** (Crear, Leer, Actualizar, Eliminar) sobre películas, así como obtener información relacionada, como el director y el género de cada película. Fue desarrollada utilizando **Node.js**, **Express** y **MySQL**.
