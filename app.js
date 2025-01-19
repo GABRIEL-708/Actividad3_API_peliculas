@@ -68,21 +68,25 @@ app.get('/films/:id', (req, res) => {
         });
     });
 });
-
 // POST /films - Crear una nueva película
 app.post('/films', (req, res) => {
-    const { title, director, genre, rating, year } = req.body;
-    if (!title || !director || !genre || !rating || !year) {
+    const { title, director, genre, puntuacion, rating, year } = req.body;
+
+    // Validar que todos los campos estén presentes
+    if (!title || !director || !genre || !puntuacion || !rating || !year) {
         return res.status(400).json({ error: 'All fields are required' });
     }
+
+    // Insertar la nueva película en la base de datos
     connection.query(
-        'INSERT INTO films (title, director, genre, rating, year) VALUES (?, ?, ?, ?, ?)',
-        [title, director, genre, rating, year],
+        'INSERT INTO films (title, director, genre, puntuacion, rating, year) VALUES (?, ?, ?, ?, ?, ?)',
+        [title, director, genre, puntuacion, rating, year],
         (err, results) => {
             if (err) {
+                console.error('Error executing query:', err);  // Depuración: Imprime el error en la consola
                 return res.status(500).json({ error: 'Error creating film' });
             }
-            res.status(201).json({ id: results.insertId, title, director, genre, rating, year });
+            res.status(201).json({ id: results.insertId, title, director, genre, puntuacion, rating, year });
         }
     );
 });
@@ -90,18 +94,26 @@ app.post('/films', (req, res) => {
 // PUT /films/:id - Actualizar una película por su ID
 app.put('/films/:id', (req, res) => {
     const filmId = req.params.id;
-    const { title, director, genre, rating, year } = req.body;
+    const { title, director, genre, puntuacion, rating, year } = req.body;
+
+    // Validar que todos los campos estén presentes
+    if (!title || !director || !genre || !puntuacion || !rating || !year) {
+        return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    // Actualizar la película en la base de datos
     connection.query(
-        'UPDATE films SET title = ?, director = ?, genre = ?, rating = ?, year = ? WHERE id = ?',
-        [title, director, genre, rating, year, filmId],
+        'UPDATE films SET title = ?, director = ?, genre = ?, puntuacion = ?, rating = ?, year = ? WHERE id = ?',
+        [title, director, genre, puntuacion, rating, year, filmId],
         (err, results) => {
             if (err) {
+                console.error('Error executing query:', err);  // Depuración: Imprime el error en la consola
                 return res.status(500).json({ error: 'Error updating film' });
             }
             if (results.affectedRows === 0) {
                 return res.status(404).json({ error: 'Film not found' });
             }
-            res.json({ id: filmId, title, director, genre, rating, year });
+            res.json({ id: filmId, title, director, genre, puntuacion, rating, year });
         }
     );
 });
